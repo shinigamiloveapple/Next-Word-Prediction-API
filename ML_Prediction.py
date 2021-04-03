@@ -24,6 +24,7 @@ history = pickle.load(open('WTPhistory.p', 'rb'))
     
 seq_len = 40
 
+#Changing the input into a single feature vector 
 def prepare_input(text):
     text = text.lower()
     x = np.zeros((1, seq_len, len(chars)))
@@ -46,8 +47,8 @@ def predict_completion(text):
     original_text = text
     completion = ''
     while True:
-        x = prepare_input(text)
-        preds = model.predict(x, verbose=0)[0]
+        line = prepare_input(text)
+        preds = model.predict(line, verbose=0)[0]
         next_index = sample(preds, top_n=1)[0]
         next_char = index_char[next_index]
         text = text[1:] + next_char
@@ -59,15 +60,15 @@ def predict_completion(text):
 
 
 def predict_completions(text, n=3):
-    x = prepare_input(text)
-    preds = model.predict(x, verbose=0)[0]
+    sent = prepare_input(text)
+    preds = model.predict(sent, verbose=0)[0]
     next_indices = sample(preds, n)
     return [index_char[idx] + predict_completion(text[1:] + index_char[idx]) for idx in next_indices]
 
 
 
 def predict_from_list(quotes):
-    d = enchant.Dict("en_US")  # This will check if the predicited word makes sense in english dictionary
+    eng_dict = enchant.Dict("en_US")  # This will check if the predicited word makes sense in english dictionary
     preds = {}
     for q in quotes:
         seq = q[-40:].lower()
@@ -81,7 +82,7 @@ def predict_from_list(quotes):
             string_pred = string_pred.strip().strip('.').strip(',').strip("'") # Removing ',' , '.', "'", and spaces.
             pred_tokens = string_pred.split()
             last_word =pred_tokens[-1]
-            if d.check(last_word):
+            if eng_dict.check(last_word):
                 req_str = ' '.join(pred_tokens) # Removing predicited words if that does not make a proper sense.
                 if (req_str not in temp) and (req_str != _key):
                     temp.append(req_str)

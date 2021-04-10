@@ -9,8 +9,8 @@ It predicts ["onger", "ength", "ive", "ange"] and give result like: <br>
 "What doesn't kill us makes us strive",<br>
 "What doesn't kill us makes us strange"]<br>
 
-**Bonus Task:**
-* Built a API with Python Flask and offered as Postman collection for testing
+**Also**
+* Built an API with Python Flask and offered as Postman collection for testing
 * Created a local PostgreSQL server and using python Psycopg2 to store the feeded string and the result
 
 ## Repo Contain:
